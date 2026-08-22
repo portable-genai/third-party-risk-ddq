@@ -1,0 +1,8 @@
+{
+  "locals": {
+    "render_region": "asia-southeast1",
+    "render_package_name": "tprm_ddq",
+    "render_env_prefix": "TPRM_DDQ",
+    "render_catalog_id": "Rgc8"
+  }
+}
