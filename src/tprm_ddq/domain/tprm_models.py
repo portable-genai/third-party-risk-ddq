@@ -19,7 +19,7 @@ from datetime import date
 
 from hex_service_kit.enums import LenientStrEnum
 
-from .kernel import Citation, Severity
+from .kernel import Citation, Severity, redacted_citations
 
 
 class CanonicalControl(LenientStrEnum):
@@ -307,6 +307,20 @@ class RegisterEntry:
     Tenant-scoped and materiality-flagged deterministically from policy thresholds. Rgc9 reads
     this over A2A as data. ``material`` is computed by the register store from the residual band
     and the profile, never asserted by a caller.
+
+    Construction MASKS the citations, for the same reason :class:`~.kernel.AuditEvent` does and
+    with the same call: the register is the audit record's sibling sink, not a lesser one. It is
+    long-lived, tenant-scoped and read by Rgc9 as data, and an extraction citation carries a
+    snippet cut straight out of an uploaded document, so raw client text reached it under a
+    structural-looking name. ``AssessmentService.assess`` hands the SAME citation tuple to the
+    audit writer and to this row; masking only the first left the identifier one sink away.
+    Redaction is idempotent, so a caller that already masked loses nothing, and a writer added
+    later cannot leak by forgetting.
+
+    ``vendor`` and ``tenant`` are NOT masked. They are the identity of the row and the pair the
+    store authorises on: masking them would erase the register's subject or break tenant
+    isolation. Same reasoning as ``AuditEvent.actor``, and the reason a leak scan runs over the
+    content fields rather than over a whole row.
     """
 
     vendor: str
@@ -315,6 +329,9 @@ class RegisterEntry:
     material: bool
     as_of: date
     citations: tuple[Citation, ...] = field(default_factory=tuple)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "citations", redacted_citations(tuple(self.citations)))
 
 
 @dataclass(frozen=True, slots=True)
