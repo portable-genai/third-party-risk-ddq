@@ -170,7 +170,7 @@ the seams those integrations switch into:
   `AuditSinkPort` and `ObservabilityTracerPort`. The managed tracer exports OTLP to the Hrz5
   collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set and to Cloud Trace when it is not.
 - **Hrz7** human-review / maker-checker console: every escalation is routed to it over the shared
-  `review-kit` (rule R8); you wire your endpoint (`HRZ_HUMAN_REVIEW_URL`), you do not
+  `review-kit` (rule R8); you wire your endpoint (`HUMAN_REVIEW_URL`), you do not
   re-implement the console.
 
 The guardrail gateway (Hrz1) is **not** integrated today, and neither is the enterprise knowledge

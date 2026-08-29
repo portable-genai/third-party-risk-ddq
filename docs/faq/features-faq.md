@@ -85,7 +85,7 @@ Be precise here, because the two domain paths are not equally exposed:
 | Agent discovery and entitlements | **Hrz3** agent registry | this agent publishes a card; the registry owns discovery. |
 | Model and agent promotion | **Hrz4** AI quality and model risk | `eval/run_eval.py --mode gate` asks Hrz4 (`TPRM_DDQ_QUALITY_URL`); the offline smoke mode never promotes. |
 | Traces and the immutable audit sink | **Hrz5** agent observability | `AuditSinkPort` and `ObservabilityTracerPort`; the managed tracer exports OTLP to the Hrz5 collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
-| Human review and maker-checker | **Hrz7** human review console | `ReviewRouterPort` over the shared `review-kit` (`HRZ_HUMAN_REVIEW_URL`). This repo produces escalations; it does not render a queue. |
+| Human review and maker-checker | **Hrz7** human review console | `ReviewRouterPort` over the shared `review-kit` (`HUMAN_REVIEW_URL`). This repo produces escalations; it does not render a queue. |
 | Prompt-injection defence and output filtering | **Hrz1** agent guardrail gateway | **not wired today.** It becomes mandatory the moment untrusted free text (a vendor-written DDQ answer, an uploaded document, a media snippet) reaches a live model (rule R1). |
 | Grounded retrieval over an enterprise corpus | **Hrz2** enterprise knowledge base | not wired today. Rsk1 supplies the rule text this vertical needs; a general corpus is not in the request path. |
 
