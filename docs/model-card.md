@@ -1,4 +1,4 @@
-# Model card: Third-Party Risk Due-Diligence Agent (Rgc8)
+# Model card: Third-Party Risk Due-Diligence Agent (`third-party-risk-ddq`)
 
 This is a STARTER model card. It records the model boundary as built and the controls that must
 be completed before a managed deployment. The deterministic engines are the system of record; a
@@ -58,7 +58,7 @@ same reason. So the managed model path is not merely unfinished, it is fail-clos
   (`adapters/_review_payload.py`, against EVERY jurisdiction's rows because the console is a
   shared sink), and before a tool result can enter a model's context (`agent/tools.py`).
 - A risk-acceptance memo is unconditionally human (`domain/hitl.py`: `requires_review` is always
-  True) and is routed to Hrz7 in the same call that produced it (rule R8); nothing auto-executes.
+  True) and is routed to `human-review-console` in the same call that produced it (rule R8); nothing auto-executes.
 
 ## Remaining controls (TODO, repo owner)
 
@@ -81,10 +81,10 @@ same reason. So the managed model path is not merely unfinished, it is fail-clos
   request rate limit, and no switch that forces deterministic-only operation. Today the stub IS
   the deterministic-only mode, so the switch is a binding change rather than an operator action.
 - **Evaluation of the live model**: the offline eval scores the deterministic pipeline with the
-  stub bound. Add a managed-profile run, registered with the Hrz4 promotion gate (P-08, rule R5),
+  stub bound. Add a managed-profile run, registered with the `model-quality-gate` promotion gate (P-08, rule R5),
   that scores the memo's and the follow-ups' groundedness against the same golden vendors with a
   real model bound.
-- **Prompt-injection screening** (rule R1): the Hrz1 guardrail gateway is not bound, and this
+- **Prompt-injection screening** (rule R1): the `agent-guardrail-gateway` is not bound, and this
   vertical's inputs are unusually hostile. A DDQ answer, an evidence document and an
   adverse-media snippet are all written by, or about, the party being assessed. Screen every one
   of them before it reaches a model, and fail closed to deterministic-only when the screen is

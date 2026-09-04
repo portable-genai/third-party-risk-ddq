@@ -1,4 +1,4 @@
-"""Third-Party Risk Due-Diligence Agent (Rgc8).
+"""Third-Party Risk Due-Diligence Agent (third-party-risk-ddq).
 
 Same-day cited vendor due-diligence: risk rating, gap analysis, human-routed memo.
 

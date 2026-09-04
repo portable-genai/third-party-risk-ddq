@@ -90,8 +90,8 @@ consequences for a model-risk review. First, nothing to review yet: the offline 
 proved able to go red. Second, the controls that MUST land before a model is bound are named in
 the card: runtime output validation (which does not exist yet, so a draft's gap ids and a memo's
 figures are not cross-checked against the engine's own), a pinned model id and version, a token
-budget, a rate limit and a kill switch, a live-model eval run registered with Hrz4, and
-prompt-injection screening through Hrz1. Until those close, the deterministic path is what should
+budget, a rate limit and a kill switch, a live-model eval run registered with `model-quality-gate`, and
+prompt-injection screening through `agent-guardrail-gateway`. Until those close, the deterministic path is what should
 be relied on.
 
 ### Which regulations does this claim to satisfy?
@@ -110,7 +110,7 @@ The `Partial` and `TODO (repo owner)` rows in `COMPLIANCE.md`, each of which nam
 is missing. The ones that need a risk acceptance if you go live without them: the ten
 construction-only managed operations in `src/tprm_ddq/managed_readiness.py` (which the container
 preflight and the Terraform serving-edge check currently refuse to let you deploy past), rule R1
-(the Hrz1 guardrail binding, before any model), rule R5 and P-08 (the Hrz4 metric bundle), P-10
+(the `agent-guardrail-gateway` binding, before any model), rule R5 and P-08 (the `model-quality-gate` metric bundle), P-10
 (timeouts, circuit breaker and a documented kill switch), the object-level tenant authorisation
 noted in the cross-cutting table, and P-01's private-egress rule, which depends on your own
 network rather than on this repo.

@@ -229,7 +229,7 @@ CANONICAL_CALLS: dict[str, PortCase] = {
     "contract_terms": PortCase(
         invoke=_contract_invoke,
         answered=_contract_answered,
-        # No Rgc12 endpoint configured, so the managed A2A client refuses.
+        # No contract-obligation-extraction endpoint configured, so the managed A2A client refuses.
         managed_refusal=(ImportError, RuntimeError),
         detail="return the vendor's contractual commitments",
     ),
@@ -243,7 +243,7 @@ CANONICAL_CALLS: dict[str, PortCase] = {
     "compliance": PortCase(
         invoke=_compliance_invoke,
         answered=_compliance_answered,
-        # No Rsk1 endpoint configured, so the managed A2A client refuses.
+        # No compliance-advisory endpoint configured, so the managed A2A client refuses.
         managed_refusal=(ImportError, RuntimeError),
         detail="fetch outsourcing-rule expectations for controls",
     ),
@@ -273,7 +273,7 @@ CANONICAL_CALLS: dict[str, PortCase] = {
     "evaluation": PortCase(
         invoke=_evaluation_invoke,
         answered=_evaluation_answered,
-        # The managed gate reaches Hrz4 over HTTP, which is unreachable offline.
+        # The managed gate reaches model-quality-gate over HTTP, which is unreachable offline.
         managed_refusal=(Exception,),
         detail="score one golden dataset through the promotion authority",
     ),

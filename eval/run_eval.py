@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Evaluation gate for Third-Party Risk Due-Diligence Agent (Rgc8).
+"""Evaluation gate for Third-Party Risk Due-Diligence Agent (third-party-risk-ddq).
 
 Two named layers via ``--mode`` (the scaffold is ``agent_eval_kit.eval_main``):
 
 * **smoke** (default) - the offline pre-merge check CI runs on every change: it drives the REAL
   assessment pipeline (extraction, scoring, gap analysis, R8 routing) against a golden vendor set
-  with SDK-free local adapters and scores five metrics against the dataset's OWN expected
-  outcomes (an independent oracle), never against the pipeline's own verdict.
-* **gate** - the promotion verdict from the shared Hrz4 authority (requires the ``gcp`` profile),
-  via ``agent_eval_kit.PromotionGateClient``.
+  with SDK-free local adapters and scores five metrics against the dataset's OWN expected outcomes
+  (an independent oracle), never against the pipeline's own verdict. * **gate** - the promotion
+  verdict from the shared model-quality-gate authority (requires the ``gcp`` profile), via
+  ``agent_eval_kit.PromotionGateClient``.
 
 Every metric is proven able to go red in ``tests/unit/test_eval_metrics_go_red.py`` and
 ``tests/unit/test_not_falsely_green.py``, in both cases against the functions THIS module ships:
@@ -56,7 +56,8 @@ THRESHOLDS: dict[str, float] = {
     "review_safety": 1.0,
     "pii_safety": 0.99,
 }
-#: The registered Hrz4 metric bundle for this vertical (Hrz4 owns the metrics + thresholds).
+#: The registered model-quality-gate metric bundle for this vertical (model-quality-gate owns the
+#: metrics + thresholds).
 _BUNDLE = "third-party-risk-ddq"
 
 
@@ -197,7 +198,8 @@ def run_smoke(dataset: Path) -> EvalReport:
     extraction = [extraction_score(case) for case in cases]
     gaps = [gap_score(case) for case in cases]
 
-    # review_safety: every assessment must route to Hrz7 and flag human review; zero auto-accept.
+    # review_safety: every assessment must route to human-review-console and flag human review; zero
+    # auto-accept.
     container = build_container(Settings(profile="local", audit_path=":memory:", tenant=_TENANT))
     service = AssessmentService(
         extraction=container.extraction,
@@ -280,6 +282,6 @@ if __name__ == "__main__":
             smoke=run_smoke,
             gate=run_gate,
             default_dataset=DEFAULT_DATASET,
-            description="Offline / Hrz4 evaluation gate for Rgc8.",
+            description="Offline / model-quality-gate for third-party-risk-ddq.",
         )
     )

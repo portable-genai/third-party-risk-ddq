@@ -7,7 +7,7 @@ here. Read it first. This file carries only what is specific to this one.
 
 ## What this is
 
-Third-Party Risk Due-Diligence Agent (Rgc8): Same-day cited vendor due-diligence: risk rating, gap analysis, human-routed memo.
+Third-Party Risk Due-Diligence Agent (`third-party-risk-ddq`): Same-day cited vendor due-diligence: risk rating, gap analysis, human-routed memo.
 Rendered from `hex-service-template`, so it starts at reference parity rather than converging
 toward it. Package `tprm_ddq`, environment prefix
 `TPRM_DDQ`, region `asia-southeast1`.

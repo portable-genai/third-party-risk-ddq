@@ -1,8 +1,9 @@
-"""Local ContractTermsPort: a fixture contract register (Rgc12 stand-in, SDK-free).
+"""Local ContractTermsPort: a fixture contract register (contract-obligation-extraction stand-in,
+SDK-free).
 
-Rgc12 is unshipped in this workspace, so this fixture freezes the contract-commitment shape and
-a contract test pins it. Deterministic commitments keyed by vendor and canonical control.
-Obviously synthetic parties only.
+contract-obligation-extraction is unshipped in this workspace, so this fixture freezes the
+contract-commitment shape and a contract test pins it. Deterministic commitments keyed by vendor and
+canonical control. Obviously synthetic parties only.
 """
 
 from __future__ import annotations
@@ -40,7 +41,9 @@ _REGISTER: dict[str, tuple[ContractCommitment, ...]] = {
 
 
 class LocalContractTermsAdapter:
-    """Return fixture contractual commitments for a vendor (the frozen Rgc12 contract)."""
+    """Return fixture contractual commitments for a vendor (the frozen
+    contract-obligation-extraction contract).
+    """
 
     def __init__(self, settings: Settings) -> None:
         self._settings = settings

@@ -13,7 +13,7 @@ variable names on the service), the Terraform `name_prefix` resource stem (`rgc8
 distribution / git id in one pass. Preview with `--dry-run`, apply with `--yes`, then recreate
 the venv, `make install`, and run `make gate`. `--resource` is validated against the same
 `^[a-z][a-z0-9-]{2,18}$` regex the Terraform variable enforces, so a bad stem fails here rather
-than at plan time. The catalog id `Rgc8` is left alone unless you pass `--catalog-id`, so a fork
+than at plan time. The catalog id `third-party-risk-ddq` is left alone unless you pass `--catalog-id`, so a fork
 stays traceable to the entry it descends from. The script does the mechanical rename; the human
 decisions (scoring policy, control taxonomy, region, IdP, eval golden set) are the checklist in
 `ADOPTING.md`.
@@ -39,19 +39,19 @@ Five things, and the first four are not code here:
    SIG/CAIQ packs mapped onto ten canonical controls, plus a `MANDATORY_CONTROLS` list that
    decides which absences become gaps.
 3. **The regulatory KB.** `CompliancePort` fetches the outsourcing-rule expectation behind every
-   gap. Point it at Rsk1 with your rules loaded, or at your own KB. Do not author rule text here.
-4. **The contract register.** `ContractTermsPort` reads the vendor's commitments. Rgc12 is
+   gap. Point it at `compliance-advisory` with your rules loaded, or at your own KB. Do not author rule text here.
+4. **The contract register.** `ContractTermsPort` reads the vendor's commitments. `contract-obligation-extraction` is
    unshipped in this workspace, so the fixture adapter freezes the shape and a contract test pins
    it; wire your own register behind the unchanged port.
-5. **The review console.** An Hrz7 deployment reachable at `HUMAN_REVIEW_URL`. The managed
+5. **The review console.** An `human-review-console` deployment reachable at `HUMAN_REVIEW_URL`. The managed
    router REFUSES to swallow an escalation when this is empty, so a fork cannot ship rule R8
    unwired and green.
 
 ### The `gcp` adapters raise. How much work is that, really?
 
 Ten operations, listed by name in `src/tprm_ddq/managed_readiness.py`: the three generation
-methods, Document AI extraction, grounded adverse-media search, the Rsk1 compliance client, the
-Rgc12 contract-terms client and the three AlloyDB register-store methods. Two things follow. The
+methods, Document AI extraction, grounded adverse-media search, the `compliance-advisory` compliance client, the
+`contract-obligation-extraction` contract-terms client and the three AlloyDB register-store methods. Two things follow. The
 container command and the API preflight refuse to start a `gcp` process whose bindings select any
 of them, and `infra/terraform/managed_readiness.tf` refuses to authorise the serving edge. That
 is deliberate: the alternative is a service that reports healthy and fails on the first real
@@ -111,6 +111,6 @@ rebuilding them for your taxonomy is adoption step 7.
 [`../practices-audit.md`](../practices-audit.md) carries the per-check verdict and the work list.
 The three that matter most before production: implementing the ten managed operations, exposing
 the full assessment pipeline on a serving surface (today only the triage path has HTTP, CLI and
-agent routes), and registering this repo's metric bundle with Hrz4 so `eval/run_eval.py --mode
+agent routes), and registering this repo's metric bundle with `model-quality-gate` so `eval/run_eval.py --mode
 gate` has an authority to ask. The Terraform stack is written, validated and tested against a
 mocked provider; it has never been applied.

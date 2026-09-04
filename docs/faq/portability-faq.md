@@ -18,7 +18,7 @@ method, so the other two families import with no SDK installed at all.
 | Profile | What it is | Who it is for |
 |---|---|---|
 | `local` | SDK-free offline stack: seeded dev personas, a hash-chained SQLite WORM audit log, a deterministic parser over a fixture evidence format, fictional adverse-media, contract and rule-text corpora, an in-memory register and a rule-based generation stub | dev, test, CI, and the offline demo |
-| `gcp` | the managed stack: IAP identity, Cloud Logging WORM, Cloud Trace or OTLP to Hrz5, the Hrz4 gate client and the Hrz7 review client. The vertical's own data adapters (Document AI extraction, grounded research, AlloyDB register, the Rsk1 and Rgc12 A2A clients, Gemini generation) are construction-only placeholders that raise | a managed deployment, once those ten operations are implemented |
+| `gcp` | the managed stack: IAP identity, Cloud Logging WORM, Cloud Trace or OTLP to `agent-observability`, the `model-quality-gate` client and the `human-review-console` review client. The vertical's own data adapters (Document AI extraction, grounded research, AlloyDB register, the `compliance-advisory` and `contract-obligation-extraction` A2A clients, Gemini generation) are construction-only placeholders that raise | a managed deployment, once those ten operations are implemented |
 | `onprem` | fail-fast `NotImplementedError` placeholders | the sovereign exit: a client binds its own in-country implementations here |
 
 `TPRM_DDQ_PROFILE` selects the family. Unset means the offline adapters bind but nobody chose
@@ -61,8 +61,8 @@ pure stdlib and moves unchanged; what you implement is one adapter per port unde
 
 The identity adapter (your IdP rather than IAP), the audit sink (your WORM store), the document
 extraction path (your parser or OCR service), the adverse-media source, the compliance client
-(your regulatory KB rather than Rsk1), the contract-terms client (your register rather than
-Rgc12), the register store (your database), the review router (your maker-checker queue) and, if
+(your regulatory KB rather than `compliance-advisory`), the contract-terms client (your register rather than
+`contract-obligation-extraction`), the register store (your database), the review router (your maker-checker queue) and, if
 you ever bind one, the generation adapter. The evaluation port is the one that deliberately
 REFUSES to promote off the managed profile: a promotion certified by a laptop with no quality
 service is certified by nothing.

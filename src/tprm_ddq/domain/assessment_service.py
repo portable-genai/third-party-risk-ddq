@@ -1,11 +1,11 @@
 """The vendor due-diligence orchestrator: ports in, a deterministic assessment out (slices 2-7).
 
-This is where the ports and the pure engines meet. It extracts evidence documents, normalises
-DDQ answers (model, schema-validated), researches adverse media, computes financial status,
-diffs the contract, scores inherent/residual risk, analyses gaps grounded in the reg KB, drafts
-follow-ups and the memo (model narration only), then redacts and audits, routes the memo to Hrz7
-(rule R8) and writes the register row. Every consequential number is produced by an engine;
-with the generation port stubbed by the local adapter, the numbers are identical.
+This is where the ports and the pure engines meet. It extracts evidence documents, normalises DDQ
+answers (model, schema-validated), researches adverse media, computes financial status, diffs the
+contract, scores inherent/residual risk, analyses gaps grounded in the reg KB, drafts follow-ups and
+the memo (model narration only), then redacts and audits, routes the memo to human-review-console
+(rule R8) and writes the register row. Every consequential number is produced by an engine; with the
+generation port stubbed by the local adapter, the numbers are identical.
 """
 
 from __future__ import annotations

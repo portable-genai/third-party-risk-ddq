@@ -1,9 +1,9 @@
-"""Local CompliancePort: a fixture outsourcing-rule KB (Rsk1 stand-in, SDK-free).
+"""Local CompliancePort: a fixture outsourcing-rule KB (compliance-advisory stand-in, SDK-free).
 
-Deterministic requirement text and a citation per canonical control. The parameter shapes echo
-APRA CPS 231 / MAS & HKMA outsourcing expectations, kept obviously synthetic. Rgc8 never invents
-regulatory text: a control with no entry here returns nothing, and the gap engine records the
-gap with an explicit "no rule text available" reference rather than a guess.
+Deterministic requirement text and a citation per canonical control. The parameter shapes echo APRA
+CPS 231 / MAS & HKMA outsourcing expectations, kept obviously synthetic. third-party-risk-ddq never
+invents regulatory text: a control with no entry here returns nothing, and the gap engine records
+the gap with an explicit "no rule text available" reference rather than a guess.
 """
 
 from __future__ import annotations

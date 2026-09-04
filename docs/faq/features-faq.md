@@ -30,7 +30,7 @@ assessment in seven deterministic steps and three narrated ones
 
 The three narrated steps run through `GenerationPort`: normalising DDQ answers into
 control-keyed claims, phrasing one follow-up question per gap, and phrasing the risk-acceptance
-memo. They compute nothing. The assessment is then redacted, audited, routed to Hrz7 and written
+memo. They compute nothing. The assessment is then redacted, audited, routed to `human-review-console` and written
 to the outsourcing register.
 
 ### What is deterministic, and what does the model write?
@@ -50,10 +50,10 @@ output-validation control an adopter must add before binding a real model.
   critical financial ratio each raise the residual band by one, whatever the prose says.
 - **It will not guess a control.** A framework identifier the taxonomy packs do not know maps to
   nothing and is surfaced as an unmapped-evidence gap rather than mapped to a nearby control.
-- **It will not invent regulatory text.** A control with no requirement fetched from Rsk1 still
+- **It will not invent regulatory text.** A control with no requirement fetched from `compliance-advisory` still
   yields a gap, cited to the evidence, with an explicit "no rule text available" reference.
 - **It will not auto-accept risk.** `domain/hitl.py` sets `requires_review` unconditionally on
-  the memo, and a consequential result is ROUTED to the Hrz7 console in the same call that
+  the memo, and a consequential result is ROUTED to the `human-review-console` in the same call that
   produced it (rule R8), on every surface.
 - **It will not answer across tenants.** A register read for another tenant is a 403 from the
   domain (`domain/register_service.py`), never a silent 404.
@@ -78,16 +78,16 @@ Be precise here, because the two domain paths are not equally exposed:
 
 | Concern | Owner | How this repo touches it |
 |---|---|---|
-| The vendor risk score, gap set and contract diff | **this repo (Rgc8)** | the deterministic engines in `domain/`. Nothing else in the catalog computes them. |
-| The Outsourcing and Material-Arrangements Register | **this repo (Rgc8)** | written over `RegisterStorePort` with tenant authorisation in the domain. **Rgc9** consumes it over A2A for reporting; this repo does not render that reporting. |
-| Outsourcing-rule text and its citation | **Rsk1** compliance assistant | read over `CompliancePort`. This repo decides which gaps exist; it never authors regulatory text. |
-| The vendor's contractual commitments | **Rgc12** contract-obligation register | read over `ContractTermsPort`. Rgc12 is unshipped in this workspace, so the offline fixture adapter freezes the contract shape and a contract test pins it. |
-| Agent discovery and entitlements | **Hrz3** agent registry | this agent publishes a card; the registry owns discovery. |
-| Model and agent promotion | **Hrz4** AI quality and model risk | `eval/run_eval.py --mode gate` asks Hrz4 (`TPRM_DDQ_QUALITY_URL`); the offline smoke mode never promotes. |
-| Traces and the immutable audit sink | **Hrz5** agent observability | `AuditSinkPort` and `ObservabilityTracerPort`; the managed tracer exports OTLP to the Hrz5 collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
-| Human review and maker-checker | **Hrz7** human review console | `ReviewRouterPort` over the shared `review-kit` (`HUMAN_REVIEW_URL`). This repo produces escalations; it does not render a queue. |
-| Prompt-injection defence and output filtering | **Hrz1** agent guardrail gateway | **not wired today.** It becomes mandatory the moment untrusted free text (a vendor-written DDQ answer, an uploaded document, a media snippet) reaches a live model (rule R1). |
-| Grounded retrieval over an enterprise corpus | **Hrz2** enterprise knowledge base | not wired today. Rsk1 supplies the rule text this vertical needs; a general corpus is not in the request path. |
+| The vendor risk score, gap set and contract diff | **this repo (`third-party-risk-ddq`)** | the deterministic engines in `domain/`. Nothing else in the catalog computes them. |
+| The Outsourcing and Material-Arrangements Register | **this repo (`third-party-risk-ddq`)** | written over `RegisterStorePort` with tenant authorisation in the domain. `operational-resilience-mapping` consumes it over A2A for reporting; this repo does not render that reporting. |
+| Outsourcing-rule text and its citation | `compliance-advisory` | read over `CompliancePort`. This repo decides which gaps exist; it never authors regulatory text. |
+| The vendor's contractual commitments | `contract-obligation-extraction` contract-obligation register | read over `ContractTermsPort`. `contract-obligation-extraction` is unshipped in this workspace, so the offline fixture adapter freezes the contract shape and a contract test pins it. |
+| Agent discovery and entitlements | `agent-registry` | this agent publishes a card; the registry owns discovery. |
+| Model and agent promotion | `model-quality-gate` AI quality and model risk | `eval/run_eval.py --mode gate` asks `model-quality-gate` (`TPRM_DDQ_QUALITY_URL`); the offline smoke mode never promotes. |
+| Traces and the immutable audit sink | `agent-observability` agent observability | `AuditSinkPort` and `ObservabilityTracerPort`; the managed tracer exports OTLP to the `agent-observability` collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
+| Human review and maker-checker | `human-review-console` human review console | `ReviewRouterPort` over the shared `review-kit` (`HUMAN_REVIEW_URL`). This repo produces escalations; it does not render a queue. |
+| Prompt-injection defence and output filtering | `agent-guardrail-gateway` agent guardrail gateway | **not wired today.** It becomes mandatory the moment untrusted free text (a vendor-written DDQ answer, an uploaded document, a media snippet) reaches a live model (rule R1). |
+| Grounded retrieval over an enterprise corpus | `enterprise-knowledge-base` | not wired today. `compliance-advisory` supplies the rule text this vertical needs; a general corpus is not in the request path. |
 
 ### Can I demo it without a cloud project?
 
@@ -104,4 +104,4 @@ rows in [`../../COMPLIANCE.md`](../../COMPLIANCE.md). The three that matter most
 decision: the managed adapter family is construction-only (ten operations are listed in
 `src/tprm_ddq/managed_readiness.py` and both the container preflight and the Terraform serving
 edge refuse while they are), the full assessment pipeline has no serving surface yet, and the
-Hrz4 metric bundle is not registered so `--mode gate` has no authority to ask.
+`model-quality-gate` metric bundle is not registered so `--mode gate` has no authority to ask.

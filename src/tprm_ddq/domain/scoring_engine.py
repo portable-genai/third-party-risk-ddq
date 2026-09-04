@@ -6,9 +6,9 @@ risk is the inherent points reduced by evidenced control effectiveness in the le
 weight and threshold is a config policy block, so every number is adopter-owned.
 
 Hard signals raise the band and can never be softened by narrative: a sanctions-category
-adverse-media hit forces CRITICAL; an adverse SOC 2 opinion, an expired certificate, a
-going-concern failure or a critical financial ratio each raise the residual band by one. The
-model may narrate the result; it may never produce a band (Doc1's ``risk_service`` rule).
+adverse-media hit forces CRITICAL; an adverse SOC 2 opinion, an expired certificate, a going-concern
+failure or a critical financial ratio each raise the residual band by one. The model may narrate the
+result; it may never produce a band (cdd-sow-research's ``risk_service`` rule).
 """
 
 from __future__ import annotations
