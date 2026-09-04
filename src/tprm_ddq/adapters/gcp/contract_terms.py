@@ -1,4 +1,6 @@
-"""GCP ContractTermsPort: platform A2A client to Rgc12 (SDK/import stays lazy)."""
+"""GCP ContractTermsPort: platform A2A client to contract-obligation-extraction (SDK/import stays
+lazy).
+"""
 
 from __future__ import annotations
 
@@ -7,7 +9,9 @@ from ...domain.tprm_models import ContractCommitment
 
 
 class CloudContractTermsAdapter:
-    """Fetch contractual commitments from Rgc12 over A2A. Refuses when unconfigured."""
+    """Fetch contractual commitments from contract-obligation-extraction over A2A. Refuses when
+    unconfigured.
+    """
 
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
@@ -18,6 +22,7 @@ class CloudContractTermsAdapter:
         import urllib.request  # noqa: F401
 
         raise RuntimeError(
-            "Rgc12 contract-terms A2A endpoint is not configured; set the contract register URL "
+            "contract-obligation-extraction contract-terms A2A endpoint is not configured; set the "
+            "contract register URL "
             "before selecting the gcp profile for contract_terms"
         )

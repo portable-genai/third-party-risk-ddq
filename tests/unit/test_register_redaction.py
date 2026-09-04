@@ -1,11 +1,11 @@
 """Nothing redaction removed survives into the vendor register either (check C3, second sink).
 
-The WORM audit record was closed by construction in :class:`AuditEvent`, and the register was
-left open: ``AssessmentService.assess`` hands the SAME citation tuple to ``_record``, which masks
-it, and to ``RegisterEntry``, which did not. The register is not a lesser sink. It is
-tenant-scoped, long-lived, read by Rgc9 over A2A as data, and an extraction citation carries
-``snippet=line[:80]`` cut straight out of an uploaded document, so raw client text reached it
-under a structural-looking name. That is the same class as the audit finding through a different
+The WORM audit record was closed by construction in :class:`AuditEvent`, and the register was left
+open: ``AssessmentService.assess`` hands the SAME citation tuple to ``_record``, which masks it, and
+to ``RegisterEntry``, which did not. The register is not a lesser sink. It is tenant-scoped,
+long-lived, read by operational-resilience-mapping over A2A as data, and an extraction citation
+carries ``snippet=line[:80]`` cut straight out of an uploaded document, so raw client text reached
+it under a structural-looking name. That is the same class as the audit finding through a different
 sink, which is why it is fixed the same way: at construction, not at the call site.
 
 Scored the way the audit suite is: the shared pack's own rows, plus planted literals that still

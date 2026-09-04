@@ -1,10 +1,10 @@
 """RegisterStorePort: the Outsourcing and Material-Arrangements Register (slice 7).
 
-A tenant-scoped store for the register Rgc9 consumes over A2A. ``upsert`` and ``get`` authorise
-against the VERIFIED principal's tenant and return a cross-tenant read as a denial, not a miss
-(403, not 404, is enforced in the domain caller). Materiality is flagged deterministically from
-policy thresholds by the store, never asserted by a caller. Adapters: GCP AlloyDB (lazy import),
-local SQLite/in-memory, onprem fail-fast.
+A tenant-scoped store for the register operational-resilience-mapping consumes over A2A. ``upsert``
+and ``get`` authorise against the VERIFIED principal's tenant and return a cross-tenant read as a
+denial, not a miss (403, not 404, is enforced in the domain caller). Materiality is flagged
+deterministically from policy thresholds by the store, never asserted by a caller. Adapters: GCP
+AlloyDB (lazy import), local SQLite/in-memory, onprem fail-fast.
 """
 
 from __future__ import annotations

@@ -1,10 +1,11 @@
-"""AdverseMediaPort: severity-ordered adverse-media findings (Doc1's research shape, slice 4).
+"""AdverseMediaPort: severity-ordered adverse-media findings (cdd-sow-research's research shape,
+slice 4).
 
 ``search(subject_name)`` returns severity-ordered findings carrying synthesised MEDIA citations,
-exactly as Doc1's ``adverse_media_service`` does. The GCP adapter isolates ``google_search``
-grounding in its own sub-agent so web egress stays in one place (lazy import); ``local`` returns
-a fictional fixture corpus; ``onprem`` fails fast. Financial figures are extracted through the
-extraction port (a financial statement is just another document), not here.
+exactly as cdd-sow-research's ``adverse_media_service`` does. The GCP adapter isolates
+``google_search`` grounding in its own sub-agent so web egress stays in one place (lazy import);
+``local`` returns a fictional fixture corpus; ``onprem`` fails fast. Financial figures are extracted
+through the extraction port (a financial statement is just another document), not here.
 """
 
 from __future__ import annotations

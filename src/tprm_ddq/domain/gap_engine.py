@@ -1,9 +1,9 @@
 """Cited gap analysis (slice 6): a pure function of the evidence ledger.
 
-Same inputs, same ranked gaps, no clock beyond ``as_of`` (Doc1's ``gap_analysis`` shape). It
-finds missing mandatory evidence, stale reports, contract-versus-evidence mismatches, unanswered
-DDQ domains and tested-weak controls. Each gap maps to the outsourcing-rule expectation it
-offends through the ``ComplianceRequirement`` the compliance port supplied, so the engine never
+Same inputs, same ranked gaps, no clock beyond ``as_of`` (cdd-sow-research's ``gap_analysis``
+shape). It finds missing mandatory evidence, stale reports, contract-versus-evidence mismatches,
+unanswered DDQ domains and tested-weak controls. Each gap maps to the outsourcing-rule expectation
+it offends through the ``ComplianceRequirement`` the compliance port supplied, so the engine never
 invents regulatory text: a control with no requirement fetched still yields a gap, cited to the
 evidence, but with an explicit "no rule text available" reference rather than a guessed one.
 """

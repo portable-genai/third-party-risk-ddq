@@ -227,7 +227,9 @@ class FinancialStatus:
 
 @dataclass(frozen=True, slots=True)
 class ContractCommitment:
-    """One contractual commitment from Rgc12, keyed to the canonical control it evidences."""
+    """One contractual commitment from contract-obligation-extraction, keyed to the canonical
+    control it evidences.
+    """
 
     control: CanonicalControl
     term: str
@@ -257,7 +259,9 @@ class GapKind(LenientStrEnum):
 
 @dataclass(frozen=True, slots=True)
 class Gap:
-    """A cited gap. ``rule_ref`` grounds it in an outsourcing-rule expectation from Rsk1."""
+    """A cited gap. ``rule_ref`` grounds it in an outsourcing-rule expectation from
+    compliance-advisory.
+    """
 
     gap_id: str
     kind: GapKind
@@ -270,7 +274,7 @@ class Gap:
 
 @dataclass(frozen=True, slots=True)
 class ComplianceRequirement:
-    """An outsourcing-rule expectation for a control, grounded in Rsk1's reg KB.
+    """An outsourcing-rule expectation for a control, grounded in compliance-advisory's reg KB.
 
     The engine never invents regulatory text: a gap cites the ``rule_ref`` and ``citation``
     fetched from the compliance port, so the follow-up and memo quote a real requirement.
@@ -304,13 +308,15 @@ class FactorScore:
 class RegisterEntry:
     """One row of the Outsourcing and Material-Arrangements Register (slice 7).
 
-    Tenant-scoped and materiality-flagged deterministically from policy thresholds. Rgc9 reads
+    Tenant-scoped and materiality-flagged deterministically from policy thresholds.
+    operational-resilience-mapping reads
     this over A2A as data. ``material`` is computed by the register store from the residual band
     and the profile, never asserted by a caller.
 
     Construction MASKS the citations, for the same reason :class:`~.kernel.AuditEvent` does and
     with the same call: the register is the audit record's sibling sink, not a lesser one. It is
-    long-lived, tenant-scoped and read by Rgc9 as data, and an extraction citation carries a
+    long-lived, tenant-scoped and read by operational-resilience-mapping as data, and an extraction
+    citation carries a
     snippet cut straight out of an uploaded document, so raw client text reached it under a
     structural-looking name. ``AssessmentService.assess`` hands the SAME citation tuple to the
     audit writer and to this row; masking only the first left the identifier one sink away.
@@ -347,7 +353,8 @@ class VendorAssessment:
     """The whole assessment: inherent/residual bands, the arithmetic, gaps, follow-ups, memo.
 
     Every band and number here comes from a pure engine. ``requires_human_review`` is always
-    True (a risk-acceptance decision is consequential) and the assessment routes to Hrz7.
+    True (a risk-acceptance decision is consequential) and the assessment routes to
+    human-review-console.
     """
 
     vendor: str

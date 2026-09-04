@@ -1,10 +1,11 @@
 """Deterministic contract-versus-evidence diff (slice 3).
 
-The contract-terms port returns the vendor's contractual commitments from Rgc12 (audit and
-step-in rights, sub-outsourcing, data residency, exit assistance, SLAs), each keyed to the
-canonical control it evidences. This engine diffs those commitments against the evidence ledger
-deterministically: a commitment the contract makes but the evidence contradicts is a mismatch,
-each citing BOTH the clause and the contradicting evidence item. The model does nothing here.
+The contract-terms port returns the vendor's contractual commitments from
+contract-obligation-extraction (audit and step-in rights, sub-outsourcing, data residency, exit
+assistance, SLAs), each keyed to the canonical control it evidences. This engine diffs those
+commitments against the evidence ledger deterministically: a commitment the contract makes but the
+evidence contradicts is a mismatch, each citing BOTH the clause and the contradicting evidence item.
+The model does nothing here.
 """
 
 from __future__ import annotations

@@ -1,4 +1,5 @@
-"""DocumentExtractionPort: parse a vendor evidence document (Doc2's extraction shape).
+"""DocumentExtractionPort: parse a vendor evidence document (credit-memo-drafting's extraction
+shape).
 
 ``extract(document)`` returns the document's full text plus deterministically parsed structure
 (tested control observations, free-text DDQ answers, financial figures). The primary adapter is

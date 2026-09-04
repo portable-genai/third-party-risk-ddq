@@ -1,4 +1,4 @@
-# Third-Party Risk Due-Diligence Agent (Rgc8) serving image.
+# Third-Party Risk Due-Diligence Agent (third-party-risk-ddq) serving image.
 #
 # Supply-chain hardening (practices checks D1/D2/D4): the base image is DIGEST-pinned so a
 # re-pushed tag cannot change what ships, dependencies come from the committed lockfile rather

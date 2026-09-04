@@ -1,9 +1,10 @@
 """Human-in-the-loop policy for the risk-acceptance memo (rule R8 / P-06).
 
-A risk-acceptance decision is consequential and board-and-regulator-facing, so the memo is
-ALWAYS human: ``requires_review`` is unconditionally True (mirroring Rsk5's ``ExitReviewPolicy``).
-``escalates`` marks the memo for senior / risk-committee sign-off when the residual band is at or
-above the escalation floor or any hard signal fired. Pure decision logic; no side effects.
+A risk-acceptance decision is consequential and board-and-regulator-facing, so the memo is ALWAYS
+human: ``requires_review`` is unconditionally True (mirroring the exit-and-portability planner's
+``ExitReviewPolicy``). ``escalates`` marks the memo for senior / risk-committee sign-off when the
+residual band is at or above the escalation floor or any hard signal fired. Pure decision logic; no
+side effects.
 """
 
 from __future__ import annotations

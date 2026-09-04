@@ -73,7 +73,7 @@ deterministic rule-based stub and the managed one raises. Before you bind a real
 [`../model-card.md`](../model-card.md): the output-validation control does NOT exist yet. A
 draft's `grounded_gap_ids` are used without checking them against the gap set the engine
 produced, and the memo prose is stored without a figure allowlist. Prompt-injection screening
-through the Hrz1 guardrail gateway is also not wired, and this vertical's inputs are written by
+through the `agent-guardrail-gateway` is also not wired, and this vertical's inputs are written by
 the party being assessed, so both controls belong in the same change (rule R1 in
 `COMPLIANCE.md`).
 
@@ -101,10 +101,10 @@ a regular expression cannot tell apart.
 
 - **Login.** This repo authenticates nobody itself: the platform in front of it does, and the UI
   forwards the assertion without parsing or trusting a parsed copy.
-- **Injection defence and output filtering.** Owned by Hrz1; not bound yet.
-- **The review queue.** Owned by Hrz7; this repo produces escalations and routes them.
-- **Regulatory text.** Owned by Rsk1; this repo cites it and never authors it.
+- **Injection defence and output filtering.** Owned by `agent-guardrail-gateway`; not bound yet.
+- **The review queue.** Owned by `human-review-console`; this repo produces escalations and routes them.
+- **Regulatory text.** Owned by `compliance-advisory`; this repo cites it and never authors it.
 - **Network egress control.** VPC-SC governs access to Google APIs across perimeters, not
-  arbitrary internet egress. The private-egress rule that lets this service reach the Rsk1 KB,
-  the Rgc12 register and the Hrz7 console and nothing else is an adopter network decision, called
+  arbitrary internet egress. The private-egress rule that lets this service reach the `compliance-advisory` KB,
+  the `contract-obligation-extraction` register and the `human-review-console` and nothing else is an adopter network decision, called
   out in `COMPLIANCE.md` P-01.

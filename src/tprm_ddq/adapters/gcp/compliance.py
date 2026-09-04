@@ -1,4 +1,4 @@
-"""GCP CompliancePort: platform A2A client to Rsk1's regulatory KB (lazy import)."""
+"""GCP CompliancePort: platform A2A client to compliance-advisory's regulatory KB (lazy import)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,9 @@ from ...domain.tprm_models import CanonicalControl, ComplianceRequirement
 
 
 class CloudComplianceAdapter:
-    """Fetch outsourcing-rule expectations from Rsk1 over A2A. Refuses when unconfigured."""
+    """Fetch outsourcing-rule expectations from compliance-advisory over A2A. Refuses when
+    unconfigured.
+    """
 
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
@@ -20,6 +22,7 @@ class CloudComplianceAdapter:
         import urllib.request  # noqa: F401
 
         raise RuntimeError(
-            "Rsk1 compliance A2A endpoint is not configured; set the regulatory KB URL before "
+            "compliance-advisory compliance A2A endpoint is not configured; set the regulatory KB "
+            "URL before "
             "selecting the gcp profile for compliance"
         )

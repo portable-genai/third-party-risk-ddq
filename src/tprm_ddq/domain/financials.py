@@ -1,4 +1,4 @@
-"""Deterministic financial-health engine (the Doc2 covenant split).
+"""Deterministic financial-health engine (the credit-memo-drafting covenant split).
 
 The model EXTRACTS figures from a vendor's financial statement into
 :class:`~.tprm_models.FinancialFigures`; this engine computes liquidity, leverage and

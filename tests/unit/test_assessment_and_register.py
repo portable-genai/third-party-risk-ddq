@@ -1,8 +1,8 @@
 """The assessment orchestrator routes R8, writes the register, and refuses cross-tenant reads.
 
 These prove the consequential end-to-end behaviour the plan requires: a memo is always routed to
-Hrz7 (never merely flagged), the register row is materiality-flagged by policy, and a read for a
-tenant other than the verified principal's is a denial, not a miss.
+human-review-console (never merely flagged), the register row is materiality-flagged by policy, and
+a read for a tenant other than the verified principal's is a denial, not a miss.
 """
 
 from __future__ import annotations
