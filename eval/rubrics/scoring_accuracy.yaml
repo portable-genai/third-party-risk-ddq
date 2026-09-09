@@ -1,0 +1,26 @@
+# Scored by: eval/run_eval.py::scoring_score against the golden case's own hand-derived residual
+# band, never the engine's output. A metric that compared the engine with itself would be a
+# tautology with a threshold.
+#
+# 0.80 was chosen when the corpus held four vendors, where it was arithmetically identical to
+# 1.0: a 0.80 bar tolerates one miss only over five, and three of four is 0.75. The corpus is
+# still four, so the bar now says 1.0, which is what it always did. The residual band is computed
+# deterministically from the profile and the evidence; there is no sampling in it for a rate to
+# describe.
+metric: scoring_accuracy
+description: >
+  The residual risk band the engine computes equals the band a reviewer derived by hand.
+threshold: 1.0
+applies_to:
+  - VendorAssessment.residual_band
+criteria:
+  - id: matches_the_reviewer
+    description: The computed band equals the golden expectation.
+    weight: 1.0
+denominator:
+  kind: all-or-nothing
+  over: golden vendors
+direction: maximize
+scoring:
+  scale: [0.0, 1.0]
+  pass_if: "score >= threshold"
