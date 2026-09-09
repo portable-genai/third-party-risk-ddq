@@ -1,0 +1,23 @@
+# Scored by: eval/run_eval.py::extraction_score over the evidence documents each vendor supplies.
+#
+# 0.90 over four vendors was a 1.0 wearing a 0.90 label, for the same arithmetic reason: a 0.90
+# bar needs ten scored positives before it can tolerate one miss. The denominator here is the
+# EVIDENCE ITEMS across the vendors rather than the vendors themselves, which is what makes the
+# bar expressible; eval/run_eval.py asserts that relationship.
+metric: extraction_fidelity
+description: >
+  Every control claim a reviewer read out of the vendor's evidence is extracted from it.
+threshold: 0.90
+applies_to:
+  - VendorAssessment.evidence
+criteria:
+  - id: claim_extracted
+    description: Each control claim the reviewer recorded appears in the extraction.
+    weight: 1.0
+denominator:
+  kind: rate
+  over: evidence items across the golden vendors
+direction: maximize
+scoring:
+  scale: [0.0, 1.0]
+  pass_if: "score >= threshold"

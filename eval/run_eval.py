@@ -25,7 +25,15 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from agent_eval_kit import EvalMetricResult, EvalReport, PromotionGateClient, eval_main
+from agent_eval_kit import (
+    EvalMetricResult,
+    EvalReport,
+    PromotionGateClient,
+    assert_denominator_supports,
+    dataset_digest,
+    eval_main,
+    load_rubrics,
+)
 from pii_kit import pack_leak
 
 from tprm_ddq.config import Settings, build_container
@@ -49,13 +57,22 @@ _AS_OF = date(2026, 1, 1)
 _ACTOR = "eval-bot@bank.example"
 _TENANT = "eval-tenant"
 
-THRESHOLDS: dict[str, float] = {
-    "scoring_accuracy": 0.80,
-    "extraction_fidelity": 0.90,
-    "gap_recall": 0.80,
-    "review_safety": 1.0,
-    "pii_safety": 0.99,
-}
+#: Where every bar lives. Not a dict here: a threshold written as a Python literal carries no
+#: argument, so a reviewer can read that scoring must clear 0.80 and cannot read that over four
+#: vendors 0.80 was arithmetically 1.0. This repository had no rubric directory at all; it does
+#: now, and `agent_eval_kit.load_rubrics` reads it.
+RUBRICS = Path(__file__).resolve().parent / "rubrics"
+THRESHOLDS: dict[str, float] = load_rubrics(RUBRICS).thresholds()
+
+#: The metrics this runner scores, in report order. Named so `assert_covers` can compare them
+#: with the rubric set in BOTH directions.
+SCORED: tuple[str, ...] = (
+    "scoring_accuracy",
+    "extraction_fidelity",
+    "gap_recall",
+    "review_safety",
+    "pii_safety",
+)
 #: The registered model-quality-gate metric bundle for this vertical (model-quality-gate owns the
 #: metrics + thresholds).
 _BUNDLE = "third-party-risk-ddq"
@@ -220,6 +237,10 @@ def _assess(container: Any, case: dict[str, Any]) -> Any:
 
 
 def run_smoke(dataset: Path) -> EvalReport:
+    # The rubrics and the scored set must agree in BOTH directions before anything is
+    # scored. This repository had no rubric directory at all, so every bar was an
+    # unlabelled module constant, which is exactly what practice E1 asks a repo not to do.
+    load_rubrics(RUBRICS).assert_covers(SCORED)
     cases = _load(dataset)
 
     scoring = [scoring_score(case) for case in cases]
@@ -285,7 +306,26 @@ def run_smoke(dataset: Path) -> EvalReport:
             "pii_safety", pii_safety(records, planted), THRESHOLDS["pii_safety"]
         ),
     )
-    return EvalReport(dataset=str(dataset), results=results, n_examples=len(cases))
+    # The corpus must be able to express every bar that claims a rate, against what actually
+    # divides it. Neither is the vendor count: extraction_fidelity is a fraction over the control
+    # CLAIMS a reviewer read out of the evidence, and gap_recall over the gaps they recorded.
+    assert_denominator_supports(
+        THRESHOLDS["extraction_fidelity"],
+        sum(len(case["expected_controls"]) for case in cases),
+        metric="extraction_fidelity",
+    )
+    assert_denominator_supports(
+        THRESHOLDS["gap_recall"],
+        sum(len(case["expected_gap_controls"]) for case in cases),
+        metric="gap_recall",
+    )
+    return EvalReport(
+        dataset=str(dataset),
+        results=results,
+        n_examples=len(cases),
+        dataset_digest=dataset_digest(dataset),
+        evaluator="offline heuristic (no cloud creds)",
+    )
 
 
 def run_gate(dataset: Path) -> tuple[EvalReport, bool]:

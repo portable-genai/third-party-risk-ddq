@@ -1,0 +1,22 @@
+# Scored by: eval/run_eval.py::gap_score against the control gaps a reviewer recorded.
+#
+# A recall metric and deliberately not a precision one: an extra gap on a vendor already going to
+# review costs a due-diligence analyst a paragraph, while a missed gap is a control nobody asked
+# the vendor about before the contract was signed.
+metric: gap_recall
+description: >
+  Every control gap a reviewer recorded for the vendor is surfaced by the engine.
+threshold: 0.80
+applies_to:
+  - VendorAssessment.gaps
+criteria:
+  - id: every_expected_gap_is_found
+    description: Each gap the reviewer recorded appears among the assessment's gaps.
+    weight: 1.0
+denominator:
+  kind: rate
+  over: expected control gaps across the golden vendors
+direction: maximize
+scoring:
+  scale: [0.0, 1.0]
+  pass_if: "score >= threshold"
