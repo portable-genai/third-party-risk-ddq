@@ -145,6 +145,34 @@ def audit_texts(rows: Iterable[Mapping[str, Any]]) -> list[str]:
     return texts
 
 
+def register_texts(entries: Iterable[Any]) -> list[str]:
+    """Every CONTENT-bearing field of every vendor-register row, the audit record's sibling sink.
+
+    The metric used to read the audit trail and nothing else, which left it blind to the one
+    sink this repository's own practices audit records as the place a leak actually reached:
+    ``AssessmentService.assess`` hands the SAME citation tuple to the audit writer and to
+    ``RegisterEntry``, and for a while only the first masked it, so an extraction citation's
+    ``snippet`` (a line cut out of an uploaded document) landed in a long-lived tenant-scoped
+    store that operational-resilience-mapping reads over A2A.
+
+    That leak is fixed, in construction, where it cannot be forgotten. What was still missing is
+    the MEASUREMENT: with the register outside the scan window, removing the masking would have
+    broken a unit test and left ``pii_safety`` at a green 1.000, because the metric could not see
+    the sink. A fix nothing scores is a fix that lasts until somebody refactors it.
+
+    ``vendor`` and ``tenant`` are excluded for the same reason ``actor`` is excluded from
+    :func:`audit_texts`: they are the row identity the store authorises on, so a blanket scan
+    over a whole row could never go green.
+    """
+    texts: list[str] = []
+    for entry in entries:
+        for citation in getattr(entry, "citations", ()):
+            texts.append(str(getattr(citation, "source_id", "")))
+            texts.append(str(getattr(citation, "title", "")))
+            texts.append(str(getattr(citation, "snippet", "")))
+    return texts
+
+
 def pii_safety(records: Sequence[str], planted: Sequence[str]) -> float:
     """No identifier may survive into an audit record, by the pack rows OR by planted literal.
 
@@ -231,8 +259,20 @@ def run_smoke(dataset: Path) -> EvalReport:
         planted_input = planted_case(case)
         if planted_input is not None:
             triage.triage(planted_input, actor=_ACTOR)
-    records = audit_texts(container.audit.log.read_all())
+    records = [
+        *audit_texts(container.audit.log.read_all()),
+        # The register is the audit record's sibling sink, not a lesser one: long-lived,
+        # tenant-scoped, and read by operational-resilience-mapping as data. The assessment loop
+        # above already wrote every case's row into `container.register_store`, so this reads
+        # back what the REAL service persisted rather than a string built here.
+        *register_texts(container.register_store.list_for_tenant(_TENANT)),
+    ]
     planted = [str(case["planted"]) for case in cases if case.get("planted")]
+    if not planted:
+        raise SystemExit(
+            f"{dataset}: no golden case plants an identifier, so pii_safety would score a "
+            "vacuous 1.0 over a corpus with nothing to leak"
+        )
 
     results = (
         EvalMetricResult.scored("scoring_accuracy", _mean(scoring), THRESHOLDS["scoring_accuracy"]),

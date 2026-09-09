@@ -19,14 +19,23 @@ all, cannot tell the two apart and stays green on the red input, which is exactl
 
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
 from agent_eval_kit import assert_can_go_red
-from eval.run_eval import THRESHOLDS, audit_texts, pii_safety, planted_case
+from eval.run_eval import (
+    THRESHOLDS,
+    audit_texts,
+    pii_safety,
+    planted_case,
+    register_texts,
+)
 
 from tprm_ddq.adapters.local.audit import LocalAuditAdapter
 from tprm_ddq.adapters.local.tracer import LocalNoopTracerAdapter
 from tprm_ddq.config import Settings
+from tprm_ddq.domain.kernel import Citation, Severity
+from tprm_ddq.domain.tprm_models import RegisterEntry
 from tprm_ddq.domain.triage_service import TriageService
 
 from tests.fixtures import sample_cases
@@ -123,3 +132,83 @@ def test_the_metric_drives_a_writer_whose_citations_carry_the_planted_identifier
     assert triage_input is not None
     assert sample_cases.PLANTED_NRIC in triage_input.text
     assert planted_case({"vendor": "X", "planted": None, "documents": []}) is None
+
+
+# --------------------------------------------------------------------------- #
+# The register: the audit record's sibling sink, and the field the scan window missed
+# --------------------------------------------------------------------------- #
+def _register_score(entries: list[RegisterEntry]) -> float:
+    """The gate's own scorer over the gate's own register-field selection."""
+    return pii_safety(register_texts(entries), _PLANTED)
+
+
+def _register_row(citation: Citation) -> RegisterEntry:
+    return RegisterEntry(
+        vendor="Gamma LLP (FICTIONAL)",
+        tenant="reference-bank",
+        residual_band=Severity.HIGH,
+        material=True,
+        as_of=date(2026, 1, 31),
+        citations=(citation,),
+    )
+
+
+def test_pii_safety_can_go_red_on_the_register_too() -> None:
+    """The widened window is proven, not asserted.
+
+    ``RegisterEntry.__post_init__`` masks citations, so a row built the ordinary way cannot
+    carry the identifier and this proof would be scoring a redactor against itself. The red
+    row therefore has the raw identifier written back onto the FROZEN instance after
+    construction, which is precisely the state a removed or bypassed mask would produce, and
+    the only state that tells a metric which reads the register apart from one which does not.
+    """
+    clean = _register_row(
+        Citation(
+            source_id="doc:evidence-tprm-003:12",
+            title="Uploaded evidence",
+            snippet=f"controls reviewed, NRIC {sample_cases.PLANTED_NRIC} on file",
+        )
+    )
+    assert sample_cases.PLANTED_NRIC not in str(clean.citations), (
+        "the register masks citations at construction; if that stopped being true this proof "
+        "would have no clean case and would be scoring nothing"
+    )
+
+    leaked = _register_row(
+        Citation(
+            source_id="doc:evidence-tprm-003:12",
+            title="Uploaded evidence",
+            snippet="placeholder",
+        )
+    )
+    object.__setattr__(
+        leaked,
+        "citations",
+        (
+            Citation(
+                source_id="doc:evidence-tprm-003:12",
+                title="Uploaded evidence",
+                snippet=f"controls reviewed, NRIC {sample_cases.PLANTED_NRIC} on file",
+            ),
+        ),
+    )
+
+    assert_can_go_red(
+        _register_score,
+        green=[clean],
+        red=[leaked],
+        threshold=THRESHOLDS["pii_safety"],
+        metric="pii_safety[register]",
+    )
+
+
+def test_the_register_scan_excludes_the_row_identity() -> None:
+    """``vendor`` and ``tenant`` are outside the window, for the same reason ``actor`` is.
+
+    They are the row's identity and the pair the store authorises on. A scan that read them
+    would go permanently red on any vendor whose NAME matched a pattern row, and a metric
+    nobody can make green gets deleted rather than fixed.
+    """
+    row = _register_row(Citation(source_id="doc:1", title="t", snippet="clean"))
+    object.__setattr__(row, "vendor", sample_cases.PLANTED_NRIC)
+    assert _register_score([row]) == 1.0
