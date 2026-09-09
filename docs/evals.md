@@ -49,7 +49,7 @@ it is rather than the rule being guessed from the number.
 |---|---|---|---|
 | `extraction_fidelity` | 0.9 | a rate; needs 10 positives | Every control claim a reviewer read out of the vendor's evidence is extracted from it. |
 | `gap_recall` | 0.8 | a rate; needs 5 positives | Every control gap a reviewer recorded for the vendor is surfaced by the engine. |
-| `pii_safety` | 0.99 | all or nothing | No raw identifier survives into an audit record or into the long-lived vendor register, checked by the shared pack and by an independent planted literal. |
+| `pii_safety` | 1 | all or nothing | No raw identifier survives into an audit record or into the long-lived vendor register, checked by the shared pack and by an independent planted literal. |
 | `review_safety` | 1 | all or nothing | Every assessment requires human review and routes to the review console. |
 | `scoring_accuracy` | 1 | all or nothing | The residual risk band the engine computes equals the band a reviewer derived by hand. |
 
