@@ -43,9 +43,9 @@ Five things, and the first four are not code here:
 4. **The contract register.** `ContractTermsPort` reads the vendor's commitments. `contract-obligation-extraction` is
    unshipped in this workspace, so the fixture adapter freezes the shape and a contract test pins
    it; wire your own register behind the unchanged port.
-5. **The review console.** An `human-review-console` deployment reachable at `HUMAN_REVIEW_URL`. The managed
-   router REFUSES to swallow an escalation when this is empty, so a fork cannot ship rule R8
-   unwired and green.
+5. **The review console.** An `human-review-console` deployment reachable at `HUMAN_REVIEW_URL`. With review routing
+   on (the default), the managed profile REFUSES TO BOOT when this is empty, so a fork cannot ship
+   rule R8 unwired and green; `DDQ_REVIEW_ROUTING=off` is the stated way to run without it.
 
 ### The `gcp` adapters raise. How much work is that, really?
 
