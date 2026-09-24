@@ -33,8 +33,10 @@ it additionally goes to senior or risk-committee sign-off. `requires_human_revie
 to `ReviewRouterPort.route` are one act, not a flag plus an intention: the API, the CLI and the
 agent tool all route in the same call that produced the result, and
 `tests/unit/test_review_routing.py` asserts the routing rather than the flag. A CRITICAL band
-demands two approvals. Under the managed profile the router REFUSES when no console is
-configured, so a deployment cannot swallow an escalation silently.
+demands two approvals. Under the managed profile a deployment with
+routing on and no console configured REFUSES TO BOOT, and a hand-off that fails at request time
+is reported to the caller as `review_routing: "failed"` and logged, so an escalation is never
+swallowed silently. `DDQ_REVIEW_ROUTING=off` switches routing off, and every result then says so.
 
 ### Where does the data live, and is residency enforced or just documented?
 
