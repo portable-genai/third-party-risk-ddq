@@ -9,7 +9,9 @@ No model, no network; the ``gcp`` adapter swaps in Gemini and validates its JSON
 
 from __future__ import annotations
 
-from ...config import Settings
+from hex_service_kit import provenance
+
+from ...config import OFFLINE_STUB_MODEL, Settings
 from ...domain.tprm_models import (
     ControlEffectiveness,
     DDQClaim,
@@ -31,6 +33,9 @@ class LocalGenerationAdapter:
         self._settings = settings
 
     def normalise_ddq(self, answers: tuple[RawDDQAnswer, ...]) -> tuple[DDQClaim, ...]:
+        # What answered, for the console's model pill: the same name `generator_model` reports
+        # under this binding, so the configured and answered pills agree.
+        provenance.note_model(OFFLINE_STUB_MODEL)
         claims: list[DDQClaim] = []
         for answer in answers:
             control = answer.control
@@ -57,6 +62,7 @@ class LocalGenerationAdapter:
         return ControlEffectiveness.PARTIAL
 
     def draft_followups(self, gaps: tuple[Gap, ...]) -> tuple[LlmDraft, ...]:
+        provenance.note_model(OFFLINE_STUB_MODEL)
         drafts: list[LlmDraft] = []
         for gap in gaps:
             question = (
@@ -67,6 +73,7 @@ class LocalGenerationAdapter:
         return tuple(drafts)
 
     def draft_memo(self, vendor: str, residual_band: str, grounded_gap_ids: tuple[str, ...]) -> str:
+        provenance.note_model(OFFLINE_STUB_MODEL)
         gap_line = ", ".join(grounded_gap_ids) if grounded_gap_ids else "no open gaps"
         return (
             f"Risk-acceptance memo for {vendor}. The deterministic engine assessed a residual "
